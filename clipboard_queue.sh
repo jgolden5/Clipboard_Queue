@@ -2,7 +2,6 @@
 clipboard_queue() {
   local selection_index=1;
   while (( selection_index <= "$#" )); do
-    echo "Selection Index = $selection_index"
     i=1
     clear
     for param in "$@"; do
@@ -25,7 +24,9 @@ clipboard_queue() {
         fi
         ;;
       *)
+        echo
         echo "Input not recognized, please try again (hit 'n' for next, or 'p' for previous)"
+        sleep 0.5
         ;;
     esac
   done
