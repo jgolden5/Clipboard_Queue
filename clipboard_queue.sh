@@ -1,9 +1,19 @@
 #!/bin/bash
 clipboard_queue() {
-  for param in "$@"; do
-    echo "$param" | pbcopy
-    read -n1 -s -p "\"$param\""
-    echo
+  for (( selection_index = 1; selection_index <= $#; selection_index++ )); do
+    echo "Selection Index = $selection_index"
+    i=1
+    clear
+    for param in "$@"; do
+      if [[ $i == $selection_index ]]; then
+        echo ">> $param"
+        echo "$param" | pbcopy
+      else
+        echo "$param"
+      fi
+      ((i++))
+    done
+    read -n1 -s -p "Hit 'n' for next"
   done
 }
 
