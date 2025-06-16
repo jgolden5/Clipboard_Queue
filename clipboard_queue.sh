@@ -13,7 +13,7 @@ clipboard_queue() {
       fi
       ((i++))
     done
-    read -n1 -s -p "Hit 'n' for next, or 'p' for previous" user_selection
+    read -n1 -s -p "Hit 'n' for next, 'p' for previous, or 'q' for quit" user_selection
     case $user_selection in
       n)
         ((selection_index++))
@@ -23,9 +23,14 @@ clipboard_queue() {
           ((selection_index--))
         fi
         ;;
+      q)
+        echo
+        echo "Quitting Clipboard Queue..."
+        return 1
+        ;;
       *)
         echo
-        echo "Input not recognized, please try again (hit 'n' for next, or 'p' for previous)"
+        echo "Input not recognized, please try again"
         sleep 0.5
         ;;
     esac
