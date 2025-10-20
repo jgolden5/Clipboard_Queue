@@ -1,0 +1,3 @@
+fix character bug in MSYS2
+add flag to remove elements once used (temp_flag=t|f)
+add ucq alias to 'unsource clipboard_queue.sh'
