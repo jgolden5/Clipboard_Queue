@@ -16,6 +16,7 @@ clipboard_queue() {
     case $user_selection in
       j)
         jump_to_line
+        echo "Selection index = $selection_index" #
         ;;
       n)
         ((selection_index++))
@@ -33,7 +34,7 @@ clipboard_queue() {
       *)
         echo
         echo "Input not recognized, please try again"
-        sleep 0.5
+        sleep 0.3
         ;;
     esac
   done
@@ -45,16 +46,18 @@ jump_to_line() {
   print_lines_with_numbers
   read -p "Which line would you like to jump to? " n
   echo
-  if [[ $n -lt 1 ]]; then
-    echo "Index was too low. Jumping to minimum index"
-    sleep 0.25
-    selection_index=1
-  elif [[ $n -gt $number_of_lines ]]; then
-    echo "Index was too high. Jumping to maximum index"
-    sleep 0.25
-    selection_index=${#lines}
+  if [[ "$n" ]]; then
+    if [[ $n -lt 1 ]]; then
+      echo "Index was too low. Jumping to minimum index"
+      sleep 0.3
+      selection_index=1
+    elif [[ $n -gt "$number_of_lines" ]]; then
+      selection_index="${#lines[@]}"
+    else
+      selection_index=$n
+    fi
   else
-    selection_index=$n
+    echo "Ok, no jumping for now then" && sleep 0.3
   fi
 }
 
