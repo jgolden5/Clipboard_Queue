@@ -1,4 +1,14 @@
 #!/bin/bash
+
+system="$(uname -a)"
+if [[ $system =~ Darwin ]]; then
+  search_command="open"
+elif [[ $system =~ Linux ]]; then
+  search_command="xdg-open"
+else
+  search_command="explorer"
+fi
+
 clipboard_queue() {
   local selection_index=1;
   local -a lines
@@ -12,11 +22,13 @@ clipboard_queue() {
   while (( selection_index <= "${#lines[@]}" )); do
     clear
     print_lines "${lines[@]}"
-    read -n1 -s -p "Hit 'n' for next, 'p' for previous, 'j' to jump to a line, or 'q' for quit" user_selection
+    read -n1 -s -p "Hit 'n' for next, 'p' for previous, 'j' to jump to a line, 'g' to google, or 'q' for quit" user_selection
     case $user_selection in
+      g)
+        google_line
+        ;;
       j)
         jump_to_line
-        echo "Selection index = $selection_index" #
         ;;
       n)
         ((selection_index++))
@@ -39,6 +51,16 @@ clipboard_queue() {
     esac
   done
   echo
+}
+
+google_line() {
+  local i=$(($selection_index - 1))
+  local line="${lines[$i]}"
+  if [[ "$line" =~ ^https:// ]]; then
+    $search_command "$line"
+  else
+    $search_command "http://www.google.com/search?q=$line"
+  fi
 }
 
 jump_to_line() {
